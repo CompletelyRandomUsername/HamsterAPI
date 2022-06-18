@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Resources;
-using Microsoft.EntityFrameworkCore;
-
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace HamsterAPI
 {
-    public class Hamster
+    public class OutHamster
     {
-
-    
         private int _id;
         public int id
         {
@@ -58,18 +55,18 @@ namespace HamsterAPI
             }
         }
 
-        private int _year_of_birth;
-        public int year_of_birth
+        private int _age_years;
+        public int age_years
         {
             get
             {
-                return _year_of_birth;
+                return _age_years;
             }
             set
             {
-                if (_year_of_birth != value)
+                if (_age_years != value)
                 {
-                    _year_of_birth = value;
+                    _age_years = value;
                 }
             }
         }
@@ -90,16 +87,16 @@ namespace HamsterAPI
             }
         }
 
-        public Hamster() 
+        public OutHamster()
         {
-
+            
         }
 
-        public Hamster(string type, int weight_grams, int year_of_birth, string ration)
+        public OutHamster(string type, int weight_grams, int age_years, string ration)
         {
             this._type = type;
             this._weight_grams = weight_grams;
-            this._year_of_birth = year_of_birth;
+            this._age_years = age_years;
             this._ration = ration;
         }
     }

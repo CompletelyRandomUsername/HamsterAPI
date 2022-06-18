@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Resources;
 
 namespace HamsterAPI.Controllers
 {
@@ -11,6 +12,7 @@ namespace HamsterAPI.Controllers
     [Route("[controller]")]
     public class HamsterController:ControllerBase
     {
+
         private static readonly string[] Types = new[]
         {
             "обычный хомяк", "джунгарский хомяк", "дикий лесной хомяк", "ангорский хомяк", "резиновый хомяк с пищалкой"
@@ -28,42 +30,88 @@ namespace HamsterAPI.Controllers
             _logger = logger;
         }
 
-        public List<Hamster> AddHamster(List<Hamster> HamsterList)
+        //public List<Hamster> AddHamster(List<Hamster> HamsterList)
+        //{
+        //    var rng = new Random();
+        //    Hamster hamster = new Hamster(Types[rng.Next(Types.Length)], rng.Next(20, 70), rng.Next(2019, 2022), Rations[rng.Next(Rations.Length)]);
+        //    HamsterList.Add(hamster);
+        //    return HamsterList;
+        //}
+
+
+
+
+        //public IEnumerable<Hamster> OutHamster(List<Hamster> HamsterList)
+        //{
+        //    var rng = new Random();
+
+        //        return Enumerable.Range(0, HamsterList.Count).Select(index => new Hamster
+        //        {
+        //            Type = HamsterList[index].GetHamsterType,
+        //            WeightGrams = HamsterList[index].GetWeightGrams,
+        //            AgeYears = HamsterList[index].GetAgeYears,
+        //            Ration = HamsterList[index].GetRation
+        //        });
+        //        .ToArray();
+
+        //}
+
+        public void AddHamster()
         {
-            var rng = new Random();
-            Hamster hamster = new Hamster(Types[rng.Next(Types.Length)], rng.Next(20, 70), rng.Next(1, 3), Rations[rng.Next(Rations.Length)]);
-            HamsterList.Add(hamster);
-            return HamsterList;
+            Random rng = new Random();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                Hamster hamster = new Hamster(Types[rng.Next(Types.Length)], rng.Next(20, 70), rng.Next(2019, 2022), Rations[rng.Next(Rations.Length)]);
+                db.hamsters.Add(hamster);
+                db.SaveChanges();
+            }
         }
 
-        public IEnumerable<Hamster> OutHamster(List<Hamster> HamsterList)
+        public IEnumerable<OutHamster> OutHamsters()
         {
-            var rng = new Random();
-            
-                return Enumerable.Range(0, HamsterList.Count).Select(index => new Hamster
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                List<Hamster> hamsters = db.hamsters.ToList();
+                List<OutHamster> outHamsters = new List<OutHamster>();
+                OutHamster outHamster;
+
+                foreach (var hamster in hamsters)
                 {
-                    Type = HamsterList[index].Type,
-                    WeightGrams = HamsterList[index].WeightGrams,
-                    AgeYears = HamsterList[index].AgeYears,
-                    Ration = HamsterList[index].Ration
+                    outHamster = new OutHamster(hamster.type, hamster.weight_grams, DateTime.Now.Year - hamster.year_of_birth, hamster.ration);
+                    outHamsters.Add(outHamster);
+                }
+ 
+                return Enumerable.Range(0, outHamsters.Count).Select(index => new OutHamster
+                {
+                    type = outHamsters[index].type,
+                    weight_grams = outHamsters[index].weight_grams,
+                    age_years = outHamsters[index].age_years,
+                    ration = outHamsters[index].ration
                 })
-                .ToArray();
-            
+                .ToList();
+            }
         }
 
 
         [HttpGet]
-        public IEnumerable<Hamster> Get()
+        public IEnumerable<OutHamster> Get()         
         {
-            List<Hamster> HamsterList = new List<Hamster>();
+            return OutHamsters();
 
-            foreach (var index in Enumerable.Range(5, 10))
-                AddHamster(HamsterList);
+            //List<Hamster> HamsterList = new List<Hamster>();
+
+            //foreach (var index in Enumerable.Range(5, 10))
+            //    AddHamster(HamsterList);
 
 
-            return OutHamster(HamsterList);
-            
+            //return OutHamster(HamsterList);
+
+
         }
+
+        
+
+        
         
     }
 }
