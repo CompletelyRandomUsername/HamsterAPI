@@ -30,31 +30,7 @@ namespace HamsterAPI.Controllers
             _logger = logger;
         }
 
-        //public List<Hamster> AddHamster(List<Hamster> HamsterList)
-        //{
-        //    var rng = new Random();
-        //    Hamster hamster = new Hamster(Types[rng.Next(Types.Length)], rng.Next(20, 70), rng.Next(2019, 2022), Rations[rng.Next(Rations.Length)]);
-        //    HamsterList.Add(hamster);
-        //    return HamsterList;
-        //}
-
-
-
-
-        //public IEnumerable<Hamster> OutHamster(List<Hamster> HamsterList)
-        //{
-        //    var rng = new Random();
-
-        //        return Enumerable.Range(0, HamsterList.Count).Select(index => new Hamster
-        //        {
-        //            Type = HamsterList[index].GetHamsterType,
-        //            WeightGrams = HamsterList[index].GetWeightGrams,
-        //            AgeYears = HamsterList[index].GetAgeYears,
-        //            Ration = HamsterList[index].GetRation
-        //        });
-        //        .ToArray();
-
-        //}
+        
 
         public void AddHamster()
         {
@@ -97,14 +73,6 @@ namespace HamsterAPI.Controllers
         public IEnumerable<OutHamster> Get()         
         {
             return OutHamsters();
-
-            //List<Hamster> HamsterList = new List<Hamster>();
-
-            //foreach (var index in Enumerable.Range(5, 10))
-            //    AddHamster(HamsterList);
-
-
-            //return OutHamster(HamsterList);
 
 
         }
