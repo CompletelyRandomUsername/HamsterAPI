@@ -9,7 +9,6 @@ using System.Resources;
 namespace HamsterAPI.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class HamsterController:ControllerBase
     {
 
@@ -30,20 +29,13 @@ namespace HamsterAPI.Controllers
             _logger = logger;
         }
 
-        
 
-        public void AddHamster()
-        {
-            Random rng = new Random();
-            using (ApplicationContext db = new ApplicationContext())
-            {
-                Hamster hamster = new Hamster(Types[rng.Next(Types.Length)], rng.Next(20, 70), rng.Next(2019, 2022), Rations[rng.Next(Rations.Length)]);
-                db.hamsters.Add(hamster);
-                db.SaveChanges();
-            }
-        }
 
-        public IEnumerable<OutHamster> OutHamsters()
+
+
+        [HttpGet]
+        [Route("[controller]/Out")]
+        public IEnumerable<OutHamster> OutHamster()
         {
             using (ApplicationContext db = new ApplicationContext())
             {
@@ -56,7 +48,7 @@ namespace HamsterAPI.Controllers
                     outHamster = new OutHamster(hamster.type, hamster.weight_grams, DateTime.Now.Year - hamster.year_of_birth, hamster.ration);
                     outHamsters.Add(outHamster);
                 }
- 
+
                 return Enumerable.Range(0, outHamsters.Count).Select(index => new OutHamster
                 {
                     type = outHamsters[index].type,
@@ -68,18 +60,30 @@ namespace HamsterAPI.Controllers
             }
         }
 
-
         [HttpGet]
-        public IEnumerable<OutHamster> Get()         
+        [Route("[controller]/Add")]
+        public string AddHamster()
         {
-            return OutHamsters();
+            Random rng = new Random();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                Hamster hamster = new Hamster(Types[rng.Next(Types.Length)], rng.Next(20, 70), rng.Next(2019, 2022), Rations[rng.Next(Rations.Length)]);
+                db.hamsters.Add(hamster);
+                db.SaveChanges();
+            }
 
-
+            return "Хомяк добавлен";
         }
 
-        
 
-        
-        
+
+
+
+
+
+
+
+
+
     }
 }

@@ -12,7 +12,7 @@
     "IIS Express": {
       "commandName": "IISExpress",
       "launchBrowser": true,
-      "launchUrl": "Hamster",
+      "launchUrl": "Hamster/Out",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
